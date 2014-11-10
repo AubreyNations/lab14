@@ -26,13 +26,20 @@ class MyApp:
 		self.myContainer1.pack()
 		
 		self.button1 = Button(self.myContainer1)
-		self.button1.configure(text="Left", background= "green")
-		self.button1.grid(row=0,column=0)
+		self.button1.configure(text="Right", background= "green")
+		self.button1.grid(row=0,column=2)
 		
 	
 		# "Bind" an action to the first button												
 		self.button1.bind("<Button-1>", self.button1Click)
-		 
+		
+		self.leftbutton = Button(self.myContainer1)
+		self.leftbutton.configure(text="Left", background= "green")
+		self.leftbutton.grid(row=0,column=0)
+		
+	
+		# "Bind" an action to the first button												
+		self.leftbutton.bind("<Button-1>", self.leftbuttonClick)
 		  
 		# This creates the drawpad - no need to change this 
 		drawpad.pack()
@@ -45,8 +52,18 @@ class MyApp:
                 # Add in boundary detection
 		global oval
 		global drawpad
-		global drawpadwidth
-		global drawpadheight
+		x1,y1,x2,y2 = drawpad.coords(oval)
+		if x2 < 480:
+		    drawpad.move(oval,20,0) 
+	def leftbuttonClick(self,event):
+	    global oval
+	    global drawpad
+	    x1,y1,x2,y2 = drawpad.coords(oval)
+	    if x1 > 0:
+	        drawpad.move(oval,-20,0)
+		    
+		    
+		
 	
 	# Add the button2Click method
 		

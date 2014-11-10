@@ -19,7 +19,7 @@ targetx2 = 280
 targety2 = 80
 target = drawpad.create_rectangle(targetx1,targety1,targetx2,targety2, fill="#FF9D1C", outline="#FF9D1C")
 player = drawpad.create_rectangle(240,240,260,260, fill="#29C462", outline="#29C462")
-
+direction = 1
 
 
 class MyApp:
@@ -60,12 +60,6 @@ class MyApp:
 	   global drawpad
 	   global player
            x1,y1,x2,y2 = drawpad.coords(player)
-	   global targetx1, targety1, targetx2, targety2
-	   px1,py1,px2,py2 = drawpad.coords(player)
-           if (px1>=targetx1 and px2<=targetx2) and (py1>=targety1 and py2<=targety2):
-                drawpad.itemconfig(target, fill="red", outline="red")
-           else:
-                drawpad.itemconfig(target, fill="#FF9D1C", outline="#FF9D1C")
 	   if y1 > 0:
 	       drawpad.move(player,0,-20)
 		
@@ -73,24 +67,12 @@ class MyApp:
 	def leftClick(self, event):   
 	   global player
            x1,y1,x2,y2 = drawpad.coords(player)
-	   global targetx1, targety1, targetx2, targety2
-	   px1,py1,px2,py2 = drawpad.coords(player)
-           if (px1>=targetx1 and px2<=targetx2) and (py1>=targety1 and py2<=targety2):
-                drawpad.itemconfig(target, fill="red", outline="red")
-           else:
-                drawpad.itemconfig(target, fill="#FF9D1C", outline="#FF9D1C")
            if x1 > 0:
 	       drawpad.move(player,-20,0)
                 	   
 	def rightClick(self, event):  
 	   global player		
            x1,y1,x2,y2 = drawpad.coords(player)
-	   global targetx1, targety1, targetx2, targety2
-	   px1,py1,px2,py2 = drawpad.coords(player)
-           if (px1>=targetx1 and px2<=targetx2) and (py1>=targety1 and py2<=targety2):
-                drawpad.itemconfig(target, fill="red", outline="red")
-           else:
-                drawpad.itemconfig(target, fill="#FF9D1C", outline="#FF9D1C")
            if x2 < 480:     
 	       drawpad.move(player,20,0)
                 		
@@ -98,27 +80,38 @@ class MyApp:
 	   global player
 	   drawpad.move(player,0,20)
            x1,y1,x2,y2 = drawpad.coords(player)
-	   global targetx1, targety1, targetx2, targety2
-	   px1,py1,px2,py2 = drawpad.coords(player)
-           if (px1>=targetx1 and px2<=targetx2) and (py1>=targety1 and py2<=targety2):
-                drawpad.itemconfig(target, fill="red", outline="red")
-           else:
-                drawpad.itemconfig(target, fill="#FF9D1C", outline="#FF9D1C")
 	   if y2 > 320:
 	       drawpad.move(player,0,-20)
-
-		# Ensure that we are doing our collision detection
-		# After we move our object!
+	       
 	
         def collisionDetect(self):
             global oval
 	    global drawpad
             x1,y1,x2,y2 = drawpad.coords(player)
 
+		# Ensure that we are doing our collision detection
+		# After we move our object!
+		
+def animate():
+    global direction 
+    global target
+    x1, y1, x2, y2 = drawpad.coords(target)
+    px1,py1,px2,py2 = drawpad.coords(player)
+    if x2 > drawpad.winfo_width():
+        direction = - 7
+    elif x1 < -5:
+        direction = 7
+    if (px1<=x1 and px2>=x2) and (py1<=y1 and py2>=y2):
+        drawpad.move(target,0,0)
+    else:
+        drawpad.move(target,direction,0)
+    drawpad.after(10, animate)
+	    
+	    
+
                 # Do your if statement - remember to return True if successful!
                 
-	    
-		
+animate ()
 myapp = MyApp(root)
 
 root.mainloop()

@@ -53,7 +53,7 @@ class MyApp:
 		  
 		# This creates the drawpad - no need to change this 
 		drawpad.pack()
-	
+	        self.animate()
 		
 	def upClick(self, event):   
                 # "global" makes sure that we can access our oval and our drawpad
@@ -67,7 +67,7 @@ class MyApp:
 	def leftClick(self, event):   
 	   global player
            x1,y1,x2,y2 = drawpad.coords(player)
-           if x1 > 0:
+           if x1 > 5:
 	       drawpad.move(player,-20,0)
                 	   
 	def rightClick(self, event):  
@@ -82,36 +82,41 @@ class MyApp:
            x1,y1,x2,y2 = drawpad.coords(player)
 	   if y2 > 320:
 	       drawpad.move(player,0,-20)
-	       
+	def animate(self):
+            global direction 
+            global target
+            x1, y1, x2, y2 = drawpad.coords(target)
+            px1,py1,px2,py2 = drawpad.coords(player)
+            if x2 > drawpad.winfo_width():
+                direction = - 7
+            elif x1 < -5:
+                direction = 7
+
+            
+            didWeHit = self.collisionDetect()
+            if didWeHit == False:
+                drawpad.move(target,direction,0)
+            drawpad.after(10, self.animate)       
 	
         def collisionDetect(self):
             global oval
 	    global drawpad
-            x1,y1,x2,y2 = drawpad.coords(player)
+            x1, y1, x2, y2 = drawpad.coords(target)
+            px1,py1,px2,py2 = drawpad.coords(player)
+            if (px1>=x1 and px2<=x2) and (py1>=y1 and py2<=y2):
+                return True
+            else:
+                return False
 
 		# Ensure that we are doing our collision detection
 		# After we move our object!
 		
-def animate():
-    global direction 
-    global target
-    x1, y1, x2, y2 = drawpad.coords(target)
-    px1,py1,px2,py2 = drawpad.coords(player)
-    if x2 > drawpad.winfo_width():
-        direction = - 7
-    elif x1 < -5:
-        direction = 7
-    if (px1<=x1 and px2>=x2) and (py1<=y1 and py2>=y2):
-        drawpad.move(target,0,0)
-    else:
-        drawpad.move(target,direction,0)
-    drawpad.after(10, animate)
+
 	    
 	    
 
                 # Do your if statement - remember to return True if successful!
                 
-animate ()
 myapp = MyApp(root)
 
 root.mainloop()
